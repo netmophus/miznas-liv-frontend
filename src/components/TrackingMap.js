@@ -123,21 +123,53 @@ const TrackingMap = () => {
     }
   };
 
+  const makeDivIcon = (letter, color) => window.L.divIcon({
+    className: 'tm-pin-marker',
+    html: `<div class="tm-pin" style="--pc:${color}"><span>${letter}</span></div>`,
+    iconSize: [36, 44],
+    iconAnchor: [18, 44],
+    popupAnchor: [0, -44],
+  });
+
   const createMap = () => {
     if (!trackingData || !mapRef.current || mapInstanceRef.current) return;
     if (mapRef.current._leaflet_id) return;
 
-    const defaultLat = trackingData.commande?.coordonneesDepart?.latitude || 13.5137;
+    const defaultLat = trackingData.commande?.coordonneesDepart?.latitude  || 13.5137;
     const defaultLng = trackingData.commande?.coordonneesDepart?.longitude || 2.1098;
     const isMobile   = window.innerWidth <= 768;
 
     try {
-      const map = window.L.map(mapRef.current).setView([defaultLat, defaultLng], isMobile ? 12 : 13);
+      const map = window.L.map(mapRef.current, {
+        zoomControl: true,
+        scrollWheelZoom: true,
+        doubleClickZoom: true,
+        touchZoom: true,
+      }).setView([defaultLat, defaultLng], isMobile ? 13 : 14);
       mapInstanceRef.current = map;
-      window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors',
-        maxZoom: 19,
-      }).addTo(map);
+
+      // Couches tuiles
+      const voyager = window.L.tileLayer(
+        'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+        { attribution: '© <a href="https://www.openstreetmap.org/copyright">OSM</a> © <a href="https://carto.com/">CARTO</a>', subdomains: 'abcd', maxZoom: 20 }
+      ).addTo(map);
+
+      const osm = window.L.tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        { attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>', maxZoom: 19 }
+      );
+
+      const satellite = window.L.tileLayer(
+        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        { attribution: '© Esri World Imagery', maxZoom: 18 }
+      );
+
+      window.L.control.layers(
+        { '🗺️ Carte (routes + bâtiments)': voyager, '🌍 OpenStreetMap': osm, '🛰️ Satellite': satellite },
+        {},
+        { position: 'topright', collapsed: true }
+      ).addTo(map);
+
       updateMap();
     } catch (err) {
       console.error('Erreur création carte:', err);
@@ -149,6 +181,7 @@ const TrackingMap = () => {
     const map      = mapInstanceRef.current;
     const commande = trackingData.commande;
 
+    // Supprimer anciens marqueurs / polylines
     map.eachLayer(layer => {
       if (layer instanceof window.L.Marker || layer instanceof window.L.Polyline) map.removeLayer(layer);
     });
@@ -162,58 +195,55 @@ const TrackingMap = () => {
       if (last.latitude && last.longitude) { coursierLat = last.latitude; coursierLng = last.longitude; }
     }
 
+    // Point A (départ)
     if (commande.coordonneesDepart) {
       const isCollecte = commande.typeCommande === 'collecte_livraison';
       const isEtab     = commande.typeCommande === 'depuis_etablissement';
-      let title   = isCollecte ? '📍 Point A (Récupération)' : isEtab ? '📍 Restaurant/Établissement' : '📍 Départ';
-      let content = title + '<br>' + commande.adresseDepart;
+      let content = `<div class="tm-popup">`;
+      content += `<b style="color:#ea580c">${isCollecte ? 'Point A — Récupération' : isEtab ? 'Restaurant' : 'Départ'}</b><br>`;
+      content += commande.adresseDepart;
       if ((isCollecte || isEtab) && commande.contactPointA) {
-        content += '<br>📞 ' + commande.contactPointA.nom;
-        if (commande.contactPointA.telephone) content += '<br>📱 ' + commande.contactPointA.telephone;
-        if (commande.contactPointA.instructions) content += '<br>💡 ' + commande.contactPointA.instructions;
+        content += `<br><span style="color:#6b7280">${commande.contactPointA.nom}`;
+        if (commande.contactPointA.telephone) content += ` · ${commande.contactPointA.telephone}`;
+        content += `</span>`;
       } else if (commande.client?.telephone) {
-        content += '<br>📞 ' + commande.client.telephone;
+        content += `<br><span style="color:#6b7280">${commande.client.telephone}</span>`;
       }
+      content += `</div>`;
       window.L.marker(
         [commande.coordonneesDepart.latitude, commande.coordonneesDepart.longitude],
-        { icon: window.L.icon({
-          iconUrl:    'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-          shadowUrl:  'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-          iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41],
-        }) }
+        { icon: makeDivIcon('A', '#ea580c') }
       ).addTo(map).bindPopup(content);
     }
 
+    // Point B (arrivée)
     if (commande.coordonneesArrivee) {
-      const isCollecte = commande.typeCommande === 'collecte_livraison';
-      const isEtab     = commande.typeCommande === 'depuis_etablissement';
-      let title   = isCollecte ? '🎯 Point B (Livraison)' : isEtab ? '🎯 Destination' : '🎯 Arrivée';
-      let content = title + '<br>' + commande.adresseArrivee;
-      if (commande.telephoneDestinataire)
-        content += '<br>📞 ' + commande.nomDestinataire + '<br>📱 ' + commande.telephoneDestinataire;
-      if (isCollecte || isEtab) content += '<br><br>💰 Le coursier sera payé ici';
+      let content = `<div class="tm-popup">`;
+      content += `<b style="color:#16a34a">Destination</b><br>`;
+      content += commande.adresseArrivee;
+      if (commande.nomDestinataire) {
+        content += `<br><span style="color:#6b7280">${commande.nomDestinataire} · ${commande.telephoneDestinataire || ''}</span>`;
+      }
+      content += `</div>`;
       window.L.marker(
         [commande.coordonneesArrivee.latitude, commande.coordonneesArrivee.longitude],
-        { icon: window.L.icon({
-          iconUrl:   'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-          iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41],
-        }) }
+        { icon: makeDivIcon('B', '#16a34a') }
       ).addTo(map).bindPopup(content);
     }
 
+    // Coursier (livreur)
     if (coursierLat && coursierLng) {
       const icon = window.L.divIcon({
         className: 'tm-coursier-marker',
-        html: '<div class="tm-coursier-pulse"></div><div class="tm-coursier-icon">🚴</div>',
-        iconSize: [50, 50], iconAnchor: [25, 25],
+        html: '<div class="tm-coursier-pulse"></div><div class="tm-coursier-dot"></div>',
+        iconSize: [48, 48], iconAnchor: [24, 24],
       });
       if (markerRef.current) map.removeLayer(markerRef.current);
       markerRef.current = window.L.marker([coursierLat, coursierLng], { icon, zIndexOffset: 1000 })
-        .addTo(map).bindPopup('🚴 Coursier — position en temps réel');
+        .addTo(map).bindPopup('<div class="tm-popup"><b style="color:#4338ca">Livreur</b><br>Position en temps réel</div>');
 
       const isMobile = window.innerWidth <= 768;
-      const padding  = isMobile ? [20, 20] : [60, 60];
+      const padding  = isMobile ? [30, 30] : [60, 60];
       if (commande.coordonneesDepart && commande.coordonneesArrivee) {
         map.fitBounds([
           [commande.coordonneesDepart.latitude,  commande.coordonneesDepart.longitude],
@@ -224,17 +254,18 @@ const TrackingMap = () => {
         map.setView([coursierLat, coursierLng], isMobile ? 14 : 15, { animate: true, duration: 0.5 });
       }
 
+      // Tracé du parcours
       if (commande.historiqueLocalisation?.length > 1) {
         const path = [
           ...commande.historiqueLocalisation.map(p => [p.latitude, p.longitude]),
           [coursierLat, coursierLng],
         ];
-        window.L.polyline(path, { color: '#6366f1', weight: 5, opacity: 0.8, smoothFactor: 1 }).addTo(map);
+        window.L.polyline(path, { color: '#4338ca', weight: 5, opacity: 0.8, smoothFactor: 1, dashArray: '8 4' }).addTo(map);
       }
     } else if (commande.coursier) {
-      const lat = commande.coordonneesDepart?.latitude || 13.5137;
+      const lat = commande.coordonneesDepart?.latitude  || 13.5137;
       const lng = commande.coordonneesDepart?.longitude || 2.1098;
-      map.setView([lat, lng], 13);
+      map.setView([lat, lng], 14);
     } else {
       map.setView([13.5137, 2.1098], 13);
     }

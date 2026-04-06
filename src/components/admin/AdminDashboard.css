@@ -1,0 +1,88 @@
+.admin-dashboard {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f7fa;
+}
+
+.admin-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  transition: margin-left 0.3s ease;
+}
+
+.admin-content.sidebar-open {
+  margin-left: 260px;
+}
+
+.admin-content.sidebar-closed {
+  margin-left: 0;
+}
+
+.admin-header {
+  background: white;
+  padding: 20px 30px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.sidebar-toggle-btn {
+  background: #f3f4f6;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-toggle-btn:hover {
+  background: #e5e7eb;
+}
+
+.admin-header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.admin-welcome {
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.admin-welcome strong {
+  color: #111827;
+  font-weight: 600;
+}
+
+.admin-main {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-content.sidebar-open {
+    margin-left: 0;
+  }
+
+  .admin-header {
+    padding: 15px 20px;
+  }
+
+  .admin-main {
+    padding: 20px;
+  }
+}
+

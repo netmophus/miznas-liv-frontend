@@ -1,0 +1,737 @@
+/* ═══════════════════════════════════════════════════════════════
+   LEGACY — gardé pour EditCommande.js
+   ═══════════════════════════════════════════════════════════════ */
+
+.create-commande-container {
+  min-height: 100vh;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-sizing: border-box;
+}
+.create-commande-card {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.3);
+  box-sizing: border-box;
+  width: 100%;
+}
+.form-header { text-align: center; margin-bottom: 40px; }
+.form-header h1 {
+  font-size: 2rem;
+  color: #1f2937;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg,#667eea,#764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  word-wrap: break-word;
+}
+.form-header p { color: #6b7280; font-size: 1rem; word-wrap: break-word; }
+.error-message {
+  background: #fee2e2; color: #dc2626; padding: 15px;
+  border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #dc2626;
+}
+.error-message p { margin: 0; }
+.commande-form { display: flex; flex-direction: column; gap: 20px; }
+.form-group { display: flex; flex-direction: column; }
+.form-group label { font-weight: 600; color: #374151; margin-bottom: 8px; font-size: .95rem; }
+.required { color: #dc2626; }
+.address-input-group { display: flex; gap: 8px; align-items: flex-start; flex-wrap: wrap; }
+.address-input-group input { flex: 1; min-width: 200px; padding: 12px 16px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 1rem; transition: border-color .3s; font-family: inherit; box-sizing: border-box; }
+.location-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-location, .btn-geocode { padding: 12px 16px; border: 2px solid #667eea; border-radius: 8px; background: white; color: #667eea; font-weight: 600; cursor: pointer; transition: all .3s; font-size: .9rem; white-space: nowrap; flex: 1; min-width: 80px; box-sizing: border-box; }
+.btn-location:hover:not(:disabled), .btn-geocode:hover:not(:disabled) { background: #667eea; color: white; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(102,126,234,.3); }
+.btn-location:disabled, .btn-geocode:disabled { opacity: .5; cursor: not-allowed; }
+.coordinates-info { margin-top: 8px; font-size: .85rem; color: #059669; font-weight: 500; }
+.form-group input, .form-group textarea, .form-group select { padding: 12px 16px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 1rem; transition: border-color .3s; font-family: inherit; width: 100%; box-sizing: border-box; }
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: #667eea; }
+.form-group textarea { resize: vertical; min-height: 100px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.form-section { margin: 25px 0; padding: 20px; background: #f9fafb; border-radius: 12px; border-left: 4px solid #667eea; }
+.form-actions { display: flex; gap: 15px; justify-content: flex-end; margin-top: 20px; padding-top: 20px; border-top: 2px solid #e5e7eb; }
+.btn-cancel, .btn-submit { padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all .3s; font-size: 1rem; }
+.btn-cancel { background: #e5e7eb; color: #374151; }
+.btn-cancel:hover:not(:disabled) { background: #d1d5db; }
+.btn-submit { background: linear-gradient(135deg,#667eea,#764ba2); color: white; }
+.btn-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(102,126,234,.4); }
+.btn-cancel:disabled, .btn-submit:disabled { opacity: .6; cursor: not-allowed; }
+.error-text { color: #dc2626; font-size: .9rem; }
+
+/* EditCommande overrides */
+.edit-commande-container .form-header h1 { color: white!important; background: none!important; -webkit-background-clip: unset!important; -webkit-text-fill-color: white!important; background-clip: unset!important; }
+.edit-commande-container .form-header p,
+.edit-commande-container .form-subtitle { color: white!important; }
+.edit-commande-container .form-group label { color: white!important; }
+.edit-commande-container .required { color: #fbbf24!important; }
+
+@media (max-width: 768px) {
+  .create-commande-container { padding: 10px; }
+  .create-commande-card { padding: 20px; border-radius: 16px; }
+  .form-header h1 { font-size: 1.5rem; }
+  .form-row { grid-template-columns: 1fr; gap: 15px; }
+  .form-actions { flex-direction: column; }
+  .btn-cancel, .btn-submit { width: 100%; }
+  .address-input-group { flex-direction: column; }
+  .address-input-group input { min-width: 100%; width: 100%; }
+  .location-buttons { width: 100%; }
+  .form-group input, .form-group textarea, .form-group select { font-size: 16px; }
+}
+@media (max-width: 480px) {
+  .create-commande-card { padding: 15px; border-radius: 12px; }
+  .form-header h1 { font-size: 1.25rem; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   NOUVEAU DESIGN — CreateCommande (préfixe cc-)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Fond ── */
+.cc-bg {
+  min-height: 100vh;
+  padding: 24px 16px 60px;
+  background: linear-gradient(145deg, #f0f2ff 0%, #faf5ff 60%, #f0fff8 100%);
+  box-sizing: border-box;
+}
+
+/* ── Wrapper centré ── */
+.cc-wrapper {
+  max-width: 780px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── En-tête page ── */
+.cc-page-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+.cc-back-btn {
+  flex-shrink: 0;
+  padding: 10px 16px;
+  background: white;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  color: #374151;
+  font-size: .9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+  margin-top: 2px;
+}
+.cc-back-btn:hover { background: #f9fafb; border-color: #667eea; color: #667eea; }
+.cc-page-title h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0 0 6px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.cc-page-title p {
+  color: #6b7280;
+  font-size: .95rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* ── Notification inline ── */
+.cc-notif {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-size: .95rem;
+  font-weight: 500;
+  animation: cc-slide-in .3s ease;
+}
+.cc-notif--success { background: #d1fae5; color: #065f46; border: 1.5px solid #6ee7b7; }
+.cc-notif--error   { background: #fee2e2; color: #991b1b; border: 1.5px solid #fca5a5; }
+
+/* ── Bannière erreur formulaire ── */
+.cc-error-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 18px;
+  background: #fef2f2;
+  border: 1.5px solid #f87171;
+  border-radius: 12px;
+  color: #b91c1c;
+  font-weight: 500;
+}
+
+/* ── Formulaire ── */
+.cc-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Section ── */
+.cc-section {
+  background: white;
+  border-radius: 18px;
+  padding: 28px;
+  box-shadow: 0 2px 16px rgba(102, 126, 234, .07);
+  border: 1.5px solid #f3f4f6;
+}
+.cc-section-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.cc-step-badge {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  font-weight: 800;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+  box-shadow: 0 4px 10px rgba(102, 126, 234, .35);
+}
+.cc-section-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 4px;
+}
+.cc-section-sub {
+  font-size: .875rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.4;
+}
+.cc-optional { color: #9ca3af; font-weight: 400; font-size: .9rem; }
+.cc-required { color: #ef4444; }
+
+/* ── Grille type commande ── */
+.cc-type-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.cc-type-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 18px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 14px;
+  background: white;
+  cursor: pointer;
+  transition: all .22s ease;
+  position: relative;
+}
+.cc-type-card:hover {
+  border-color: #a5b4fc;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, .12);
+  transform: translateY(-1px);
+}
+.cc-type-card--active {
+  box-shadow: 0 6px 24px rgba(102, 126, 234, .18);
+  transform: translateY(-1px);
+}
+.cc-type-icon-wrap {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cc-type-icon { font-size: 1.6rem; }
+.cc-type-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.cc-type-num { font-size: .75rem; font-weight: 700; letter-spacing: .04em; }
+.cc-type-titre { font-size: 1rem; font-weight: 700; color: #1f2937; }
+.cc-type-desc { font-size: .875rem; color: #6b7280; line-height: 1.4; margin: 0; }
+.cc-type-radio {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #d1d5db;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+  font-size: .75rem;
+  color: white;
+  transition: all .2s;
+}
+.cc-type-radio--on { font-size: .8rem; }
+
+/* ── Route (itinéraire) ── */
+.cc-route {
+  display: flex;
+  flex-direction: column;
+}
+.cc-route-row {
+  display: flex;
+  gap: 16px;
+  align-items: stretch;
+}
+.cc-route-col-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: 44px;
+}
+.cc-route-dot {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 800;
+  color: white;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,.15);
+}
+.cc-route-dot--a {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+.cc-route-dot--b {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+.cc-route-vline {
+  flex: 1;
+  width: 3px;
+  background: linear-gradient(to bottom, #a5b4fc, #6ee7b7);
+  border-radius: 2px;
+  margin: 6px 0;
+  min-height: 24px;
+}
+.cc-route-col-right {
+  flex: 1;
+  padding-bottom: 24px;
+}
+.cc-route-row--last .cc-route-col-right { padding-bottom: 0; }
+
+/* ── Label ── */
+.cc-label {
+  display: block;
+  font-weight: 600;
+  color: #374151;
+  font-size: .9rem;
+  margin-bottom: 8px;
+}
+.cc-label--block { display: block; margin-bottom: 12px; }
+.cc-label--mt { margin-top: 24px; }
+
+/* ── Input ── */
+.cc-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-family: inherit;
+  color: #1f2937;
+  background: white;
+  transition: border-color .2s, box-shadow .2s;
+  box-sizing: border-box;
+}
+.cc-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, .12);
+}
+.cc-input::placeholder { color: #9ca3af; }
+
+/* ── Rangée adresse + boutons GPS ── */
+.cc-addr-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.cc-addr-row .cc-input { flex: 1; }
+
+/* ── Boutons GPS / Recherche ── */
+.cc-icon-btn {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  border: 2px solid #e5e7eb;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all .2s;
+}
+.cc-icon-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(0,0,0,.1); }
+.cc-icon-btn:disabled { opacity: .45; cursor: not-allowed; }
+.cc-icon-btn--gps  { border-color: #667eea; }
+.cc-icon-btn--gps:hover:not(:disabled) { background: #667eea; color: white; }
+.cc-icon-btn--search { border-color: #10b981; }
+.cc-icon-btn--search:hover:not(:disabled) { background: #10b981; color: white; }
+.cc-icon-btn--loading { background: #f3f4f6; }
+
+/* ── Badges GPS / Téléphone ── */
+.cc-gps-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  font-size: .8rem;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+.cc-gps-badge--ok   { background: #d1fae5; color: #065f46; }
+.cc-gps-badge--warn { background: #fef9c3; color: #78350f; }
+.cc-phone-hint {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: .82rem;
+  color: #667eea;
+  font-weight: 500;
+}
+
+/* ── Spinner ── */
+.cc-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2.5px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: cc-spin .7s linear infinite;
+  vertical-align: middle;
+}
+.cc-spinner--dark { color: #667eea; }
+.cc-spinner--white { color: white; margin-right: 6px; }
+
+/* ── Cards contact ── */
+.cc-contact-card {
+  border-radius: 14px;
+  padding: 20px;
+  border: 2px solid;
+}
+.cc-contact-card--a {
+  background: #fffbeb;
+  border-color: #fde68a;
+}
+.cc-contact-card--b {
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+.cc-mt { margin-top: 16px; }
+
+/* ── Bandeau paiement destinataire ── */
+.cc-dest-payment-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #fefce8;
+  border: 1px solid #fde68a;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin: 4px 0 14px;
+  font-size: 0.85rem;
+  color: #92400e;
+  line-height: 1.45;
+}
+
+.cc-dest-payment-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.cc-contact-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.cc-contact-header > div > strong {
+  display: block;
+  font-size: .97rem;
+  color: #1f2937;
+  margin-bottom: 4px;
+}
+.cc-contact-header > div > p {
+  font-size: .85rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.4;
+}
+.cc-contact-badge {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: .95rem;
+  color: white;
+}
+.cc-contact-badge--a { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.cc-contact-badge--b { background: linear-gradient(135deg, #10b981, #059669); }
+
+/* ── Form row (grille 2 colonnes) ── */
+.cc-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.cc-field { display: flex; flex-direction: column; }
+
+/* ── Textarea ── */
+.cc-textarea {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-family: inherit;
+  color: #1f2937;
+  background: white;
+  resize: vertical;
+  min-height: 110px;
+  transition: border-color .2s, box-shadow .2s;
+  box-sizing: border-box;
+}
+.cc-textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, .12);
+}
+.cc-textarea::placeholder { color: #9ca3af; }
+
+/* ── Grille formules livraison ── */
+.cc-livraison-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 4px;
+}
+.cc-livraison-card {
+  position: relative;
+  padding: 18px 14px 14px;
+  border: 2px solid #e5e7eb;
+  border-radius: 14px;
+  background: white;
+  cursor: pointer;
+  text-align: center;
+  transition: all .22s;
+}
+.cc-livraison-card:hover {
+  border-color: #a5b4fc;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(102, 126, 234, .13);
+}
+.cc-livraison-card--active {
+  border-color: #667eea;
+  background: #f0f0ff;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, .2);
+  transform: translateY(-2px);
+}
+.cc-livraison-icon { font-size: 1.5rem; margin-bottom: 8px; }
+.cc-livraison-name { font-weight: 700; color: #1f2937; font-size: .92rem; margin-bottom: 6px; }
+.cc-livraison-price {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #667eea;
+}
+.cc-livraison-price span { font-size: .75rem; font-weight: 600; }
+.cc-livraison-desc { font-size: .78rem; color: #9ca3af; margin-top: 5px; }
+.cc-livraison-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #667eea;
+  color: white;
+  font-size: .75rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Grille paiement ── */
+.cc-payment-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.cc-payment-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 18px 10px;
+  border: 2px solid #e5e7eb;
+  border-radius: 14px;
+  background: white;
+  cursor: pointer;
+  transition: all .22s;
+  text-align: center;
+}
+.cc-payment-card:hover {
+  border-color: #a5b4fc;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, .12);
+}
+.cc-payment-card--active {
+  border-color: #667eea;
+  background: #f0f0ff;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, .18);
+  transform: translateY(-2px);
+}
+.cc-payment-icon  { font-size: 1.8rem; }
+.cc-payment-label { font-size: .85rem; font-weight: 600; color: #374151; }
+.cc-payment-check {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #667eea;
+  color: white;
+  font-size: .7rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Loading types ── */
+.cc-loading-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #6b7280;
+  font-size: .95rem;
+  padding: 16px 0;
+}
+.cc-error-text { color: #ef4444; font-size: .9rem; }
+
+/* ── Actions ── */
+.cc-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding-top: 8px;
+}
+.cc-btn-cancel {
+  padding: 14px 24px;
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  color: #374151;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all .2s;
+}
+.cc-btn-cancel:hover:not(:disabled) { background: #f9fafb; border-color: #d1d5db; }
+.cc-btn-cancel:disabled { opacity: .55; cursor: not-allowed; }
+.cc-btn-submit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all .22s;
+  box-shadow: 0 4px 14px rgba(102, 126, 234, .4);
+}
+.cc-btn-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, .45);
+}
+.cc-btn-submit:disabled { opacity: .65; cursor: not-allowed; transform: none; }
+
+/* ── Animations ── */
+@keyframes cc-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes cc-slide-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════ */
+
+@media (max-width: 600px) {
+  .cc-bg { padding: 16px 12px 48px; }
+
+  .cc-page-title h1 { font-size: 1.35rem; }
+
+  .cc-section { padding: 20px 16px; }
+
+  .cc-type-card { flex-wrap: wrap; }
+  .cc-type-icon-wrap { width: 44px; height: 44px; }
+  .cc-type-icon { font-size: 1.3rem; }
+  .cc-type-radio { position: absolute; top: 14px; right: 14px; }
+
+  .cc-route-dot { width: 36px; height: 36px; font-size: .85rem; }
+  .cc-route-col-left { width: 36px; }
+
+  .cc-addr-row { flex-wrap: wrap; }
+  .cc-addr-row .cc-input { min-width: 100%; }
+  .cc-icon-btn { flex: 1; width: auto; }
+
+  .cc-form-row { grid-template-columns: 1fr; gap: 10px; }
+
+  .cc-livraison-grid { grid-template-columns: repeat(2, 1fr); }
+
+  .cc-payment-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .cc-payment-card { padding: 14px 6px; }
+  .cc-payment-icon { font-size: 1.5rem; }
+  .cc-payment-label { font-size: .78rem; }
+
+  .cc-actions { flex-direction: column; }
+  .cc-btn-cancel, .cc-btn-submit { width: 100%; justify-content: center; }
+}
+
+@media (max-width: 380px) {
+  .cc-payment-grid { grid-template-columns: 1fr; }
+  .cc-livraison-grid { grid-template-columns: 1fr; }
+}

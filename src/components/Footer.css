@@ -1,0 +1,122 @@
+/* ══════════════════════════════════════
+   FOOTER MODERNE — SwiftLivraison
+   ══════════════════════════════════════ */
+
+.ft-footer {
+  background: #0a0a0f;
+  color: #94a3b8;
+  padding: 56px 24px 28px;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+}
+.ft-inner { max-width: 1100px; margin: 0 auto; }
+
+/* ── Grille top ── */
+.ft-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  gap: 40px;
+  padding-bottom: 44px;
+  border-bottom: 1px solid #1e293b;
+  margin-bottom: 28px;
+}
+
+/* ── Logo ── */
+.ft-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  margin-bottom: 14px;
+}
+.ft-logo > span:first-child { font-size: 1.5rem; }
+.ft-logo > span:last-child { font-size: 1.1rem; color: #e2e8f0; font-weight: 400; }
+.ft-logo > span:last-child strong { font-weight: 800; color: #a5b4fc; }
+
+.ft-brand p { font-size: .875rem; line-height: 1.65; max-width: 260px; margin: 0 0 20px; }
+
+/* ── Socials ── */
+.ft-socials { display: flex; gap: 8px; }
+.ft-social {
+  width: 34px; height: 34px;
+  border-radius: 8px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  font-size: .8rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all .2s;
+}
+.ft-social:hover { background: #667eea; border-color: #667eea; color: white; }
+
+/* ── Colonnes liens ── */
+.ft-col h4 {
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #e2e8f0;
+  margin: 0 0 14px;
+}
+.ft-col ul {
+  list-style: none;
+  margin: 0; padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.ft-col ul li a {
+  color: #64748b;
+  text-decoration: none;
+  font-size: .875rem;
+  transition: color .2s;
+}
+.ft-col ul li a:hover { color: #a5b4fc; }
+
+/* ── Contacts ── */
+.ft-contacts { display: flex; flex-direction: column; gap: 13px; }
+.ft-contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: .875rem;
+}
+.ft-contact-item > span { font-size: .95rem; flex-shrink: 0; margin-top: 1px; }
+.ft-contact-item strong { display: block; color: #e2e8f0; font-size: .8rem; margin-bottom: 2px; }
+.ft-contact-item a,
+.ft-contact-item span:last-child { color: #64748b; text-decoration: none; }
+.ft-contact-item a:hover { color: #a5b4fc; }
+
+/* ── Bottom bar ── */
+.ft-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: .8rem;
+  color: #475569;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.ft-bottom p { margin: 0; }
+.ft-bottom-links { display: flex; gap: 18px; }
+.ft-bottom-links a { color: #475569; text-decoration: none; transition: color .2s; }
+.ft-bottom-links a:hover { color: #a5b4fc; }
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════ */
+@media (max-width: 900px) {
+  .ft-top { grid-template-columns: 1fr 1fr; }
+  .ft-brand { grid-column: 1 / -1; }
+}
+
+@media (max-width: 540px) {
+  .ft-footer { padding: 44px 20px 24px; }
+  .ft-top { grid-template-columns: 1fr; gap: 28px; }
+  .ft-brand { grid-column: auto; }
+  .ft-bottom { flex-direction: column; text-align: center; }
+  .ft-bottom-links { flex-direction: column; align-items: center; gap: 6px; }
+}

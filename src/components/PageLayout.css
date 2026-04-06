@@ -1,0 +1,21 @@
+.page-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  min-height: calc(100vh - 140px);
+}
+
+/* Pour les pages qui n'ont pas besoin du layout centré */
+.page-content.full-width {
+  align-items: flex-start;
+  padding: 0;
+}
+

@@ -1,0 +1,276 @@
+.coursier-revenus-container {
+  min-height: 100vh;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.revenus-header {
+  max-width: 1400px;
+  margin: 0 auto 30px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.btn-back {
+  padding: 10px 20px;
+  background: white;
+  color: #667eea;
+  border: none;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.btn-back:hover {
+  background: #f3f4f6;
+  transform: translateY(-2px);
+}
+
+.revenus-header h1 {
+  color: white;
+  font-size: 2rem;
+  margin: 0;
+}
+
+.error-message {
+  max-width: 1400px;
+  margin: 0 auto 20px;
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #dc2626;
+}
+
+.stats-cards {
+  max-width: 1400px;
+  margin: 0 auto 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.stat-card {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-card.highlight {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.stat-icon {
+  font-size: 3rem;
+}
+
+.stat-content h3 {
+  margin: 0 0 10px 0;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.stat-card.highlight .stat-content h3 {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+}
+
+.stat-card.highlight .stat-value {
+  color: white;
+}
+
+.stat-note {
+  margin: 8px 0 0 0;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.stat-card.highlight .stat-note {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.revenus-details {
+  max-width: 1400px;
+  margin: 0 auto;
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.revenus-details h2 {
+  margin: 0 0 20px 0;
+  color: #1f2937;
+  font-size: 1.5rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6b7280;
+}
+
+.empty-state p {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
+.empty-subtitle {
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+.commandes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.commande-revenue-card {
+  background: #f9fafb;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.commande-revenue-card:hover {
+  border-color: #667eea;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.commande-revenue-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.commande-revenue-header h3 {
+  margin: 0 0 5px 0;
+  color: #1f2937;
+  font-size: 1.1rem;
+}
+
+.commande-date {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.revenue-badge {
+  text-align: right;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 12px 20px;
+  border-radius: 8px;
+  color: white;
+}
+
+.revenue-label {
+  display: block;
+  font-size: 0.8rem;
+  opacity: 0.9;
+  margin-bottom: 5px;
+}
+
+.revenue-amount {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.commande-revenue-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-row span:first-child {
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.detail-row span:last-child {
+  color: #1f2937;
+}
+
+.detail-row.highlight {
+  background: #f0f4ff;
+  padding: 12px;
+  border-radius: 8px;
+  border: 2px solid #667eea;
+  margin-top: 5px;
+}
+
+.detail-row.highlight span:first-child {
+  color: #667eea;
+  font-weight: 700;
+}
+
+.revenue-highlight {
+  color: #667eea !important;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .revenus-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .stats-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .commande-revenue-header {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .revenue-badge {
+    width: 100%;
+    text-align: center;
+  }
+
+  .detail-row {
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+
+
